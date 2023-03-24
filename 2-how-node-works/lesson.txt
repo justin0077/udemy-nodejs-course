@@ -1,0 +1,16 @@
+##### THE EVENT LOOP #####
+START -> Expired timer Callbacks -> I/O polling callbacks -> setImmediate callbacks -> Close callbacks 
+
+##### Don't BLOCK #####
+ - Don't use sync versions of fucntion in fs, crypto and zlib modules in your callback functions
+ - Don't perform complex calculations (e.g. loops inside loops)
+ - Be careful with JSON in large objects
+ - Don't use too complex regular expressions (e.g. nested quantifiers)
+
+
+##### STREAMS #####
+ - READABLE STREAMS
+ - WRITEABLE STREAMS
+ - DUPLEX STREAMS 
+ - TRANSFORM STREAMS
+

@@ -1,0 +1,6 @@
+REST ARCHITECTURE
+    1. Separate API into logical resources
+    2. Expose structured, resource-based URLs
+    3. Use HTTP methods (verbs)
+    4. Send data as JSON (usaually)
+    5. Be stateless
