@@ -96,7 +96,7 @@ tourSchema
   });
 
 //Document Middleware, runs before .save() and .create()
-tourSchema.pre('save', (next) => {
+tourSchema.pre('save', function (next) {
   this.slug = slugify(this.name, { lower: true });
   next();
 });
@@ -112,7 +112,29 @@ tourSchema.pre('save', (next) => {
 // });
 
 // Query Middleware
-tourSchema.pre('find', (next) => {
+// tourSchema.pre('find', function (next) {
+tourSchema.pre(/^find/, function (next) {
+  this.find({ secretTour: { $ne: true } });
+
+  this.start = Date.now();
+  next();
+});
+
+tourSchema.post(/^find/, function (docs, next) {
+  console.log(
+    `Query took ${
+      Date.now() - this.start
+    } miliseconds`
+  );
+  next();
+});
+
+// Aggregation Middleware
+tourSchema.pre('aggregate', function (next) {
+  this.pipeline().unshift({
+    $match: { secretTour: { $ne: true } },
+  });
+  console.log(this);
   next();
 });
 
