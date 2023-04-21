@@ -11,12 +11,19 @@ const filterObj = (obj, ...allowedFields) => {
   return newObj;
 };
 
-exports.getAllUsers = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'This route is not yet defined',
-  });
-};
+exports.getAllUsers = catchAsync(
+  async (req, res) => {
+    const user = await User.find();
+
+    res.status(200).json({
+      status: 'success',
+      results: user.length,
+      data: {
+        user,
+      },
+    });
+  }
+);
 
 exports.updateMe = catchAsync(
   async (req, res, next) => {
@@ -51,6 +58,18 @@ exports.updateMe = catchAsync(
       data: {
         user: updatedUser,
       },
+    });
+  }
+);
+
+exports.deleteMe = catchAsync(
+  async (req, res, next) => {
+    await User.findByIdAndUpdate(req.user.id, {
+      active: false,
+    });
+    res.status(204).json({
+      status: 'success',
+      data: null,
     });
   }
 );
