@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const slugify = require('slugify');
-const User = require('./User');
+// const User = require('./User');
 // const validator = require('validator');
 
 const tourSchema = new mongoose.Schema(
@@ -155,6 +155,13 @@ tourSchema
   .get(function () {
     return this.duration / 7;
   });
+
+// Virtual Populate
+tourSchema.virtual('reviews', {
+  ref: 'Review',
+  foreignField: 'tour',
+  localField: '_id',
+});
 
 //Document Middleware, runs before .save() and .create()
 tourSchema.pre('save', function (next) {

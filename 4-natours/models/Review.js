@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const Tour = require('./Tour');
+const User = require('./User');
 
 const reviewSchema = new mongoose.Schema(
   {
@@ -14,7 +16,7 @@ const reviewSchema = new mongoose.Schema(
     },
 
     createdAt: {
-      tyoe: Date,
+      type: Date,
       default: Date.now(),
     },
 
@@ -42,9 +44,29 @@ const reviewSchema = new mongoose.Schema(
   }
 );
 
+reviewSchema.pre(/^find/, function (next) {
+  // this.populate({
+  //   path: 'tour',
+  //   select: 'name',
+  // }).populate({
+  //   path: 'user',
+  //   select: 'name photo ',
+  // });
+
+  this.populate({
+    path: 'user',
+    select: 'name photo ',
+  });
+
+  next();
+});
+
 const Review = mongoose.model(
   'Review',
   reviewSchema
 );
 
 module.exports = Review;
+
+// POST / tour/234fad4/reviews
+// GET / tour/234fad4/reviews
