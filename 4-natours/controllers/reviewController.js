@@ -1,42 +1,25 @@
 const Review = require('../models/Review');
-const catchAsync = require('../utils/catchAsync');
+const factory = require('./handlerFactory');
 
-exports.getAllReviews = catchAsync(
-  async (req, res, next) => {
-    let filter = {};
-    if (req.params.tourId)
-      filter = { tour: req.params.tourId };
+exports.setTourUserIds = (req, res, next) => {
+  if (!req.body.tour)
+    req.body.tour = req.params.tourId;
 
-    const reviews = await Review.find(filter);
+  if (!req.body.user) req.body.user = req.user.id;
+  next();
+};
 
-    res.status(200).json({
-      status: 'success',
-      results: reviews.length,
-      data: {
-        reviews,
-      },
-    });
-  }
-);
+// Get All Reviews
+exports.getAllReviews = factory.getAll(Review);
 
-exports.createReview = catchAsync(
-  async (req, res, next) => {
-    // Allow nested routes
-    if (!req.body.tour)
-      req.body.tour = req.params.tourId;
+// Get Review
+exports.getReview = factory.getOne(Review);
 
-    if (!req.body.user)
-      req.body.user = req.user.id;
+// Create Review
+exports.createReview = factory.createOne(Review);
 
-    const newReview = await Review.create(
-      req.body
-    );
+// Update Review
+exports.updateReview = factory.updateOne(Review);
 
-    res.status(201).json({
-      status: 'success',
-      data: {
-        review: newReview,
-      },
-    });
-  }
-);
+// Delete Review
+exports.deleteReview = factory.deleteOne(Review);
